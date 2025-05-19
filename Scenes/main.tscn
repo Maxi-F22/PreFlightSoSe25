@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://cw30op1s6t6qc"]
+
+[ext_resource type="Texture2D" uid="uid://d3u5p0j5dv2io" path="res://Assets/MeterGrid.png" id="1_jjgbg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7dm0k"]
+albedo_color = Color(0.219608, 0.415686, 1, 1)
+albedo_texture = ExtResource("1_jjgbg")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="Environment" id="Environment_ig7tw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7u77a"]
+albedo_color = Color(0, 0.432551, 0.144177, 1)
+
+[node name="Main" type="Node3D"]
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_7dm0k")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ig7tw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, -0.353553, 0.353553, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.63551, 0)
+use_collision = true
+material = SubResource("StandardMaterial3D_7u77a")
+
+[node name="SpectatorCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.939537, 0.342447, 0, -0.342447, 0.939537, 0, 3, 5)
