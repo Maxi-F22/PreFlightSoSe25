@@ -7,3 +7,5 @@ Made by Lucia, Sven, Marcel, Maxi.
 Game was made using Godot.
 
 Assets were scanned using Reality Capture and edited / animated in Blender.
+
+(Maxi Branch Test)
