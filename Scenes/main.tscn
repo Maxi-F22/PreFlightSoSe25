@@ -65,3 +65,6 @@ shadow_enabled = true
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1364, 1.68179, 0)
 mesh = SubResource("BoxMesh_bo1nx")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5716, 1.4517, 0)
