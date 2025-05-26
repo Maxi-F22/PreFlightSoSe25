@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cw30op1s6t6qc"]
+[gd_scene load_steps=9 format=3 uid="uid://cw30op1s6t6qc"]
 
 [ext_resource type="Texture2D" uid="uid://d3u5p0j5dv2io" path="res://Assets/MeterGrid.png" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://diundtpp6gn0q" path="res://Scenes/player.tscn" id="2_bo1nx"]
@@ -21,6 +21,8 @@ sky_material = SubResource("ProceduralSkyMaterial_bo1nx")
 background_mode = 2
 background_color = Color(0, 0, 0.184314, 1)
 sky = SubResource("Sky_bo1nx")
+
+[sub_resource type="BoxMesh" id="BoxMesh_bo1nx"]
 
 [node name="Main" type="Node3D"]
 
@@ -59,3 +61,7 @@ environment = SubResource("Environment_8gbba")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, -0.353553, 0.353553, 0, 0, 0)
 shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1364, 1.68179, 0)
+mesh = SubResource("BoxMesh_bo1nx")
