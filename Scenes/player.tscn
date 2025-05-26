@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://diundtpp6gn0q"]
+
+[ext_resource type="Script" uid="uid://cft6xavystj83" path="res://Scripts/player.gd" id="1_cvnsp"]
+[ext_resource type="Material" uid="uid://3ryxu44uhhuj" path="res://Assets/Mats/paperwhite.tres" id="1_v0iea"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cvnsp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6t5aa"]
+size = Vector3(0.001, 1.1, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkybt"]
+albedo_color = Color(0.0235294, 0.501961, 0.533333, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_x3wgy"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vgqql"]
+height = 1.13739
+radius = 0.680664
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_cvnsp")
+mouse_sensitivity = 0.005
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+spring_length = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="ToiletRoll" type="CSGCylinder3D" parent="Visuals"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
+radius = 0.687
+height = 1.1
+sides = 36
+material = ExtResource("1_v0iea")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Visuals/ToiletRoll"]
+operation = 2
+use_collision = true
+radius = 0.327
+height = 1.128
+sides = 36
+material = SubResource("StandardMaterial3D_cvnsp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals/ToiletRoll"]
+transform = Transform3D(0.978057, -1.71227e-08, -0.208338, 1.4227e-08, 1, -1.53975e-08, 0.208338, 1.20956e-08, 0.978057, -0.681717, -7.50617e-11, 3.2813e-18)
+material_override = ExtResource("1_v0iea")
+mesh = SubResource("BoxMesh_6t5aa")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Visuals/ToiletRoll"]
+transform = Transform3D(0.978057, -1.71227e-08, -0.208338, 1.4227e-08, 1, -1.53975e-08, 0.208338, 1.20956e-08, 0.978057, 0.690955, 5.99263e-08, -2.61946e-15)
+material_override = ExtResource("1_v0iea")
+mesh = SubResource("BoxMesh_6t5aa")
+
+[node name="Avatar" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 1.17601, 0)
+material_override = SubResource("StandardMaterial3D_fkybt")
+mesh = SubResource("CapsuleMesh_x3wgy")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, -1.02715e-10, 0.00234985)
+shape = SubResource("CylinderShape3D_vgqql")
