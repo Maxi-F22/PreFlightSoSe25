@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cw30op1s6t6qc"]
+[gd_scene load_steps=10 format=3 uid="uid://cw30op1s6t6qc"]
 
 [ext_resource type="Script" uid="uid://bcj1vj7v76h85" path="res://Scripts/SpawnerScript.gd" id="1_8gbba"]
 [ext_resource type="Texture2D" uid="uid://d3u5p0j5dv2io" path="res://Assets/MeterGrid.png" id="1_jjgbg"]
@@ -23,8 +23,11 @@ background_mode = 2
 background_color = Color(0, 0, 0.184314, 1)
 sky = SubResource("Sky_bo1nx")
 
+[sub_resource type="BoxMesh" id="BoxMesh_bo1nx"]
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_8gbba")
+Spawn_obj = null
 
 [node name="Floor" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -61,3 +64,14 @@ environment = SubResource("Environment_8gbba")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, -0.353553, 0.353553, 0, 0, 0)
 shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1364, 1.68179, 0)
+mesh = SubResource("BoxMesh_bo1nx")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5716, 1.4517, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.72731, 3.40457, 0)
+mesh = SubResource("BoxMesh_bo1nx")

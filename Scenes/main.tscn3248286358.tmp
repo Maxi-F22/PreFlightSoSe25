@@ -25,6 +25,8 @@ sky = SubResource("Sky_bo1nx")
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_8gbba")
+spawn_obj = null
+spawn_interval = null
 
 [node name="Floor" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
