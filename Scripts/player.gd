@@ -5,12 +5,12 @@ extends CharacterBody3D
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.005
 @export var tilt_limit = deg_to_rad(60)
+@export var paper_distance = 1.0
 
 const SPEED = 6.0
 const JUMP_VELOCITY = 4.5
 const ROTATION_SPEED = 1.8
 const ROLL_ROTATION_SPEED = 2.0
-const PAPER_DISTANCE_THRESHOLD = 1.0
 
 var mouse_captured := false
 
@@ -90,7 +90,7 @@ func _physics_process(delta):
 			var distance = current_pos.distance_to(Vector3(last_paper_position.x, 0, last_paper_position.z))
 			
 			# Only spawn paper if we've moved far enough
-			if distance >= PAPER_DISTANCE_THRESHOLD:
+			if distance >= paper_distance:
 				toilet_paper = paper_scene.instantiate()
 				toilet_paper.position = Vector3(position.x, 0.01, position.z)
 				toilet_paper.rotation = Vector3(0, rotation.y, 0)

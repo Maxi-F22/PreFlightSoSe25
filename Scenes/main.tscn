@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://cw30op1s6t6qc"]
 
 [ext_resource type="Texture2D" uid="uid://d3u5p0j5dv2io" path="res://Assets/MeterGrid.png" id="1_jjgbg"]
-[ext_resource type="PackedScene" uid="uid://cpgx7ofcfmaie" path="res://Scenes/player.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://diundtpp6gn0q" path="res://Scenes/player.tscn" id="2_bo1nx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7dm0k"]
 albedo_color = Color(0.219608, 0.415686, 1, 1)
