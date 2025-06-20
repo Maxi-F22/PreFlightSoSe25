@@ -25,7 +25,7 @@ func _ready():
 	_camera_pivot.top_level = true
 	# Setze die anfängliche Position
 	_camera_pivot.global_position = global_position + initial_camera_offset
-
+	
 func _physics_process(delta):
 	_camera_pivot.global_position = global_position + initial_camera_offset
 
@@ -58,7 +58,13 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		is_moving = false
-
+		
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var other = collision.get_collider()
+		if other and other.is_in_group("enemies"):
+			other.die()
+			
 	move_and_slide()
 
 
@@ -83,3 +89,7 @@ func capture_mouse():
 func release_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	mouse_captured = false
+	
+func _on_area_body_entered(body):
+	if body.is_in_group("EnemyPrefab"):
+		print("yay")
