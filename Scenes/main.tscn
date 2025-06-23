@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cw30op1s6t6qc"]
+[gd_scene load_steps=9 format=3 uid="uid://cw30op1s6t6qc"]
 
 [ext_resource type="Texture2D" uid="uid://d3u5p0j5dv2io" path="res://Assets/MeterGrid.png" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://diundtpp6gn0q" path="res://Scenes/player.tscn" id="2_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://cpb6sk4gws2eu" path="res://Assets/bathroom_4k.exr" id="3_8gbba"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7dm0k"]
 albedo_color = Color(0.219608, 0.415686, 1, 1)
@@ -12,15 +13,16 @@ uv1_world_triplanar = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7u77a"]
 albedo_color = Color(0, 0.432551, 0.144177, 1)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bo1nx"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jjvhh"]
+panorama = ExtResource("3_8gbba")
 
-[sub_resource type="Sky" id="Sky_bo1nx"]
-sky_material = SubResource("ProceduralSkyMaterial_bo1nx")
+[sub_resource type="Sky" id="Sky_kry3j"]
+sky_material = SubResource("PanoramaSkyMaterial_jjvhh")
 
 [sub_resource type="Environment" id="Environment_8gbba"]
 background_mode = 2
 background_color = Color(0, 0, 0.184314, 1)
-sky = SubResource("Sky_bo1nx")
+sky = SubResource("Sky_kry3j")
 
 [node name="Main" type="Node3D"]
 
