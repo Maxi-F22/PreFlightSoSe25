@@ -2,21 +2,21 @@
 
 [ext_resource type="MeshLibrary" uid="uid://de4itua8tpdhe" path="res://Resources/world-blocks-v1.tres" id="2_8gbba"]
 [ext_resource type="PackedScene" uid="uid://diundtpp6gn0q" path="res://Scenes/player.tscn" id="2_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://cpb6sk4gws2eu" path="res://Assets/bathroom_4k.exr" id="3_8gbba"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7u77a"]
 albedo_color = Color(0, 0.432551, 0.144177, 1)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bo1nx"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jjvhh"]
+panorama = ExtResource("3_8gbba")
 
-[sub_resource type="Sky" id="Sky_bo1nx"]
-sky_material = SubResource("ProceduralSkyMaterial_bo1nx")
+[sub_resource type="Sky" id="Sky_kry3j"]
+sky_material = SubResource("PanoramaSkyMaterial_jjvhh")
 
 [sub_resource type="Environment" id="Environment_8gbba"]
 background_mode = 2
 background_color = Color(0, 0, 0.184314, 1)
-sky = SubResource("Sky_bo1nx")
-
-[sub_resource type="BoxMesh" id="BoxMesh_bo1nx"]
+sky = SubResource("Sky_kry3j")
 
 [node name="Main" type="Node3D"]
 
@@ -49,6 +49,7 @@ environment = SubResource("Environment_8gbba")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, -0.353553, 0.353553, 0, 0, 0)
 shadow_enabled = true
+
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1364, 1.68179, 0)

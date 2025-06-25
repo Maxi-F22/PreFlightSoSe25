@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://qxpxuvcku1yp"]
+
+[ext_resource type="Material" uid="uid://3ryxu44uhhuj" path="res://Assets/Mats/paperwhite.tres" id="1_thabk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4urcx"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.1, 0, 0, 0, 0.01, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = ExtResource("1_thabk")
+mesh = SubResource("BoxMesh_4urcx")
