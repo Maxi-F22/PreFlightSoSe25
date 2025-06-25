@@ -92,7 +92,7 @@ func _physics_process(delta):
 			# Only spawn paper if we've moved far enough
 			if distance >= paper_distance:
 				toilet_paper = paper_scene.instantiate()
-				toilet_paper.position = Vector3(position.x, 0.01, position.z)
+				toilet_paper.position = Vector3(position.x, position.y-0.5, position.z)
 				toilet_paper.rotation = Vector3(0, rotation.y, 0)
 				main_scene.add_child(toilet_paper)
 		
