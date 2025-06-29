@@ -53,6 +53,8 @@ func _physics_process(delta):
 		direction = direction.normalized()
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
+	elif position.distance_to(target.position) > 100:
+		die()
 	else:
 		velocity.x = 0
 		velocity.z = 0

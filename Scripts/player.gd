@@ -33,11 +33,19 @@ var player_anim_player : AnimationPlayer
 var sounds_fegen : AudioStreamPlayer3D
 var sounds_jump : AudioStreamPlayer3D
 
+var hud : CanvasLayer
+
 var health : int = 3
+var heart_nodes
+var can_move : bool = true
 
 func _ready():
 	$BodyArea.body_entered.connect(_on_player_body_entered)
 	$RollArea.body_entered.connect(_on_roll_body_entered)
+	$RollArea.area_entered.connect(_on_roll_area_entered)
+
+	hud = get_tree().get_root().get_node("Main/HUD")
+	heart_nodes = hud.get_node("Hearts").get_children()
 
 	player_anim_tree = _player_model.get_node("AnimationTree")
 	player_anim_player = _player_model.get_node("AnimationPlayer")
@@ -92,7 +100,7 @@ func _physics_process(delta):
 	input_cur += (Vector2(0, input_dir.y) - input_cur).clamp(Vector2(-input_acc, -input_acc), Vector2(input_acc, input_acc))  
 	player_anim_tree.set(locomotion_blend_path, input_cur)  
 
-	if direction:
+	if direction and can_move:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 
@@ -115,6 +123,7 @@ func _physics_process(delta):
 				toilet_paper = paper_scene.instantiate()
 				toilet_paper.position = Vector3(position.x, position.y-0.7, position.z)
 				toilet_paper.rotation = Vector3(0, rotation.y, 0)
+				toilet_paper.add_to_group("papers")
 				main_scene.add_child(toilet_paper)
 		
 				# Update last paper position
@@ -144,9 +153,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func take_damage():
-	print("Player takes damage!")
-	health =- 1
-	pass
+	health = health - 1
+	for i in range(heart_nodes.size()):
+		if i == health:
+			heart_nodes[i].visible = false
+	if health == 0:
+		respawn(true)
+
 
 
 func _on_player_body_entered(body):
@@ -158,6 +171,10 @@ func _on_roll_body_entered(body):
 	if body and body.is_in_group("enemies"):
 		body.die()
 
+func _on_roll_area_entered(area):
+	if area.name == "GoalArea":
+		respawn(false)
+
 
 func capture_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -167,3 +184,27 @@ func capture_mouse():
 func release_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	mouse_captured = false
+
+func respawn(is_dying):
+	if (is_dying):
+		can_move = false
+		hud.get_node("DeathScreen").visible = true
+	else:
+		hud.get_node("WinScreen").visible = true
+
+	for e in get_tree().get_nodes_in_group("enemies"):
+		e.queue_free()
+	for p in get_tree().get_nodes_in_group("papers"):
+		p.queue_free()
+
+	await get_tree().create_timer(5.0).timeout
+
+	hud.get_node("WinScreen").visible = false
+	hud.get_node("DeathScreen").visible = false
+	position = get_tree().get_root().get_node("Main/RespawnPosition").position
+
+	can_move = true
+
+	health = 3
+	for i in range(heart_nodes.size()):
+		heart_nodes[i].visible = true
