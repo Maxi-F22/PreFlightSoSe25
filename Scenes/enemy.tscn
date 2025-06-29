@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=3 uid="uid://ctct8omby51uq"]
+
+[ext_resource type="Script" uid="uid://cfpjbk0pavqvy" path="res://Scripts/enemy.gd" id="1_hghv2"]
+[ext_resource type="PackedScene" uid="uid://dllkvyast11eg" path="res://Assets/Prefabs/enemy.glb" id="2_afpow"]
+[ext_resource type="PackedScene" uid="uid://b2pui1516e5ym" path="res://Assets/Prefabs/enemy_squished.glb" id="3_287tu"]
+[ext_resource type="AudioStream" uid="uid://b6fxnqvbe3rtl" path="res://Assets/Sounds/crush_sound.wav" id="4_287tu"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ne65n"]
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_hghv2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ne65n")
+
+[node name="EnemyModel" parent="." instance=ExtResource("2_afpow")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, -0.527794, 0)
+
+[node name="EnemyModelSquished" parent="." instance=ExtResource("3_287tu")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+
+[node name="SoundManagerEnemy" type="Node3D" parent="."]
+
+[node name="Squish" type="AudioStreamPlayer3D" parent="SoundManagerEnemy"]
+stream = ExtResource("4_287tu")
+volume_db = -12.0

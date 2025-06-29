@@ -2,6 +2,8 @@ extends CharacterBody3D
 
 @onready var _camera_pivot := $CameraPivot as Node3D
 @onready var _toilet_roll := $Visuals/ToiletRoll as CSGCylinder3D
+@onready var _player_model: = $Visuals/PlayerModel  as Node3D
+@onready var _player_sounds: = $SoundManagerPlayer  as Node3D
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.005
 @export var tilt_limit = deg_to_rad(60)
@@ -14,8 +16,6 @@ const ROLL_ROTATION_SPEED = 2.0
 
 var mouse_captured := false
 
-var roll_percentage := 100.0
-
 var main_scene = null
 var paper_scene = null
 var toilet_paper = null
@@ -24,13 +24,33 @@ var initial_camera_offset := Vector3.ZERO
 var initial_roll_scale := 0.0
 var last_paper_position := Vector3.ZERO
 
+var locomotion_blend_path : String = "parameters/blend_position"  
+var input_cur : Vector2 = Vector2(0, 0)  
+var input_acc : float = 0.1  
+var player_anim_tree : AnimationTree
+var player_anim_player : AnimationPlayer
+
+var sounds_fegen : AudioStreamPlayer3D
+var sounds_jump : AudioStreamPlayer3D
+
+var health : int = 3
+
 func _ready():
+	$BodyArea.body_entered.connect(_on_player_body_entered)
+	$RollArea.body_entered.connect(_on_roll_body_entered)
+
+	player_anim_tree = _player_model.get_node("AnimationTree")
+	player_anim_player = _player_model.get_node("AnimationPlayer")
+
 	capture_mouse()
 
 	initial_roll_scale = _toilet_roll.radius
 
 	paper_scene = load("res://Scenes/paper.tscn")
 	main_scene = get_tree().current_scene
+
+	sounds_fegen = _player_sounds.get_node("Fegen")
+	sounds_jump = _player_sounds.get_node("Jump")
 
 	# Speichere den ursprünglichen lokalen Offset der Kamera
 	initial_camera_offset = _camera_pivot.position 
@@ -51,15 +71,26 @@ func _physics_process(delta):
 
 	# Add the gravity.
 	if not is_on_floor():
+		sounds_fegen.stop()
 		velocity += get_gravity() * delta
+		if position.y < -100.0:
+			position = get_tree().get_root().get_node("Main/RespawnPosition").position
+	else:
+		player_anim_tree.active = true
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		player_anim_tree.active = false
+		player_anim_player.play("jump")
+		sounds_jump.play()
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("left", "right", "forward", "back")
 	var direction = (transform.basis * Vector3(0, 0, input_dir.y)).normalized()
+
+	input_cur += (Vector2(0, input_dir.y) - input_cur).clamp(Vector2(-input_acc, -input_acc), Vector2(input_acc, input_acc))  
+	player_anim_tree.set(locomotion_blend_path, input_cur)  
 
 	if direction:
 		velocity.x = direction.x * SPEED
@@ -73,26 +104,16 @@ func _physics_process(delta):
 
 		# Make paper trail if moving and on floor every 0.5 units
 		if is_on_floor():
-			roll_percentage -= delta * 10.0  # Decrease roll percentage over time
-			roll_percentage = clamp(roll_percentage, 20, 100)
-
-			# Scale the toilet roll based on the roll percentage
-			var scale_factor = roll_percentage / 100.0
-			_toilet_roll.radius = initial_roll_scale * scale_factor
-
-			if roll_percentage <= 48:
-				# Reset the roll when it runs out
-				roll_percentage = 100.0
-				_toilet_roll.radius = initial_roll_scale
-
-			 # Calculate distance from last paper position
+			if not sounds_fegen.playing:
+				sounds_fegen.play()
+			# Calculate distance from last paper position
 			var current_pos = Vector3(position.x, 0, position.z)  # Ignore Y for distance calculation
 			var distance = current_pos.distance_to(Vector3(last_paper_position.x, 0, last_paper_position.z))
 			
 			# Only spawn paper if we've moved far enough
 			if distance >= paper_distance:
 				toilet_paper = paper_scene.instantiate()
-				toilet_paper.position = Vector3(position.x, position.y-0.5, position.z)
+				toilet_paper.position = Vector3(position.x, position.y-0.7, position.z)
 				toilet_paper.rotation = Vector3(0, rotation.y, 0)
 				main_scene.add_child(toilet_paper)
 		
@@ -102,9 +123,9 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+		sounds_fegen.stop()
 
 	move_and_slide()
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -120,6 +141,22 @@ func _unhandled_input(event: InputEvent) -> void:
 			release_mouse()
 		else:
 			capture_mouse()
+
+
+func take_damage():
+	print("Player takes damage!")
+	health =- 1
+	pass
+
+
+func _on_player_body_entered(body):
+	if body and body.is_in_group("enemies"):
+		take_damage()
+		body.die()
+		
+func _on_roll_body_entered(body):
+	if body and body.is_in_group("enemies"):
+		body.die()
 
 
 func capture_mouse():
